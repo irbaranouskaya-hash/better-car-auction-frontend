@@ -40,7 +40,10 @@ export const carsApi = {
   },
 
   getCarPrice: async (id: string): Promise<CarPriceResponse> => {
-    const response = await axiosInstance.get<CarPriceResponse>(`/cars/${id}/price`);
+    const response = await axiosInstance.get<any>(`/cars/${id}/price`);
+    if (response.data.data) {
+      return response.data.data;
+    }
     return response.data;
   },
 

@@ -198,7 +198,7 @@ export const ManageAuctionCarsPage: React.FC = () => {
           {auctionCars.map((car) => (
             <Card key={car._id} className="car-card">
               <div className="car-card-header">
-                <h3>{car.VIN}</h3>
+                <h3>{car.year} {car.brand} {car.model}</h3>
                 <Badge 
                   variant={
                     (car.grade || 0) >= 70 ? 'success' : 
@@ -211,6 +211,10 @@ export const ManageAuctionCarsPage: React.FC = () => {
               </div>
 
               <div className="car-card-details">
+                <div className="detail-row">
+                  <span className="detail-label">VIN:</span>
+                  <span className="detail-value">{car.VIN}</span>
+                </div>
                 <div className="detail-row">
                   <span className="detail-label">Year:</span>
                   <span className="detail-value">{car.year}</span>
@@ -303,9 +307,9 @@ export const ManageAuctionCarsPage: React.FC = () => {
                       style={{ marginRight: '0.75rem' }}
                     />
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 500 }}>{car.VIN}</div>
+                      <div style={{ fontWeight: 500 }}>{car.year} {car.brand} {car.model}</div>
                       <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                        {car.year} • {formatOdometer(car.odometerValue)} • {formatPrice(car.msrp)}
+                        VIN: {car.VIN} • {formatOdometer(car.odometerValue)} • {formatPrice(car.msrp)}
                       </div>
                     </div>
                   </label>

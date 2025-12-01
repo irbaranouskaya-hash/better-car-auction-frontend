@@ -196,7 +196,7 @@ export const MyBidsPage: React.FC = () => {
                           className="car-title clickable"
                           onClick={() => handleViewCar(bid.carDetails!._id)}
                         >
-                          {bid.carDetails.year} - {bid.carDetails.VIN}
+                          {bid.carDetails.year} {bid.carDetails.brand} {bid.carDetails.model}
                         </h3>
                         <div className="car-details-grid">
                           <div className="detail-item">

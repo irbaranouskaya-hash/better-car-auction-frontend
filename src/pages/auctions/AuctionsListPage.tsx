@@ -20,26 +20,31 @@ export const AuctionsListPage: React.FC = () => {
     const fetchAuctions = async () => {
       try {
         setLoading(true);
+        
+        const apiStatus = statusFilter === 'ended' ? 'all' : statusFilter;
+        
         const response = await auctionsApi.getAuctions({
-          status: statusFilter,
+          status: apiStatus,
           page: currentPage,
           limit: 9,
         });
         
-        // Debug: посмотрим что пришло
         console.log('Auctions API response:', response);
         
-        // Обрабатываем разные форматы ответа
         let auctionsData: Auction[] = [];
         
         if (response.auctions) {
           auctionsData = response.auctions;
         } else if (Array.isArray(response)) {
-          // Если ответ сам по себе массив
           auctionsData = response as any;
         } else if ((response as any).data) {
-          // Если данные в поле data
           auctionsData = (response as any).data;
+        }
+        
+        if (statusFilter === 'ended') {
+          auctionsData = auctionsData.filter(
+            (auction: any) => auction.status === 'ended' || auction.status === 'closed'
+          );
         }
         
         console.log('Parsed auctions:', auctionsData);
@@ -47,7 +52,7 @@ export const AuctionsListPage: React.FC = () => {
         setTotalPages(response.pagination?.totalPages || 1);
       } catch (error) {
         console.error('Failed to fetch auctions:', error);
-        setAuctions([]); // Set empty array on error
+        setAuctions([]);
       } finally {
         setLoading(false);
       }
@@ -64,6 +69,8 @@ export const AuctionsListPage: React.FC = () => {
         return <Badge variant="warning">Upcoming</Badge>;
       case 'ended':
         return <Badge variant="default">Ended</Badge>;
+      case 'closed':
+        return <Badge variant="default">Closed</Badge>;
       default:
         return null;
     }

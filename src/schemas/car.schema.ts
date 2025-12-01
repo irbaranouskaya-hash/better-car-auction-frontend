@@ -6,6 +6,12 @@ export const carSchema = z.object({
   VIN: z.string()
     .length(17, 'VIN must be exactly 17 characters')
     .regex(/^[A-HJ-NPR-Z0-9]{17}$/, 'Invalid VIN format (excludes I, O, Q)'),
+  brand: z.string()
+    .min(1, 'Brand is required')
+    .max(50, 'Brand must be at most 50 characters'),
+  model: z.string()
+    .min(1, 'Model is required')
+    .max(50, 'Model must be at most 50 characters'),
   odometerValue: z.number()
     .int('Odometer must be a whole number')
     .min(0, 'Odometer cannot be negative')

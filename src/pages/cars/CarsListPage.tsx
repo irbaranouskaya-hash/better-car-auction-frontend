@@ -16,13 +16,14 @@ export const CarsListPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   
-  // Фильтры
   const [vinSearch, setVinSearch] = useState('');
+  const [brandSearch, setBrandSearch] = useState('');
+  const [modelSearch, setModelSearch] = useState('');
   const [minYear, setMinYear] = useState('');
   const [maxYear, setMaxYear] = useState('');
   const [minOdometer, setMinOdometer] = useState('');
   const [maxOdometer, setMaxOdometer] = useState('');
-  const [sortBy, setSortBy] = useState<'year' | 'odometerValue' | 'createdAt'>('createdAt');
+  const [sortBy, setSortBy] = useState<'year' | 'odometerValue' | 'createdAt' | 'brand' | 'model'>('createdAt');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
@@ -31,6 +32,8 @@ export const CarsListPage: React.FC = () => {
         setLoading(true);
         const response = await carsApi.getCars({
           VIN: vinSearch || undefined,
+          brand: brandSearch || undefined,
+          model: modelSearch || undefined,
           minYear: minYear ? parseInt(minYear) : undefined,
           maxYear: maxYear ? parseInt(maxYear) : undefined,
           minOdometer: minOdometer ? parseInt(minOdometer) : undefined,
@@ -69,10 +72,12 @@ export const CarsListPage: React.FC = () => {
     };
 
     fetchCars();
-  }, [currentPage, vinSearch, minYear, maxYear, minOdometer, maxOdometer, sortBy, sortOrder]);
+  }, [currentPage, vinSearch, brandSearch, modelSearch, minYear, maxYear, minOdometer, maxOdometer, sortBy, sortOrder]);
 
   const handleResetFilters = () => {
     setVinSearch('');
+    setBrandSearch('');
+    setModelSearch('');
     setMinYear('');
     setMaxYear('');
     setMinOdometer('');
@@ -110,6 +115,36 @@ export const CarsListPage: React.FC = () => {
             />
           </div>
 
+          <div className="filter-group">
+            <label>Brand:</label>
+            <input
+              type="text"
+              placeholder="e.g., Toyota"
+              value={brandSearch}
+              onChange={(e) => {
+                setBrandSearch(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="filter-input"
+            />
+          </div>
+
+          <div className="filter-group">
+            <label>Model:</label>
+            <input
+              type="text"
+              placeholder="e.g., Camry"
+              value={modelSearch}
+              onChange={(e) => {
+                setModelSearch(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="filter-input"
+            />
+          </div>
+        </div>
+
+        <div className="filters-row">
           <div className="filter-group">
             <label>Year:</label>
             <div className="filter-range">
@@ -174,6 +209,8 @@ export const CarsListPage: React.FC = () => {
               className="filter-select"
             >
               <option value="createdAt">Date Added</option>
+              <option value="brand">Brand</option>
+              <option value="model">Model</option>
               <option value="year">Year</option>
               <option value="odometerValue">Odometer</option>
             </select>
@@ -219,13 +256,17 @@ export const CarsListPage: React.FC = () => {
                 <Card hover>
                   <div className="car-card">
                     <div className="car-card-header">
-                      <h3 className="car-vin">{car.VIN}</h3>
+                      <h3 className="car-vin">{car.year} {car.brand} {car.model}</h3>
                       <Badge variant={(car.grade || 0) >= 70 ? 'success' : (car.grade || 0) >= 50 ? 'warning' : 'error'}>
                         {getGradeLabel(car.grade || 0)}
                       </Badge>
                     </div>
 
                     <div className="car-card-body">
+                      <div className="car-detail">
+                        <span className="label">VIN:</span>
+                        <span className="value">{car.VIN}</span>
+                      </div>
                       <div className="car-detail">
                         <span className="label">Year:</span>
                         <span className="value">{car.year}</span>

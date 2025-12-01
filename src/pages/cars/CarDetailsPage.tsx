@@ -89,9 +89,9 @@ export const CarDetailsPage: React.FC = () => {
     <div className="car-details-page container">
       <div className="car-details-header">
         <div>
-          <h1>{formatVIN(car.VIN)}</h1>
+          <h1>{car.year} {car.brand} {car.model}</h1>
           <p className="car-subtitle">
-            {car.year} • {formatOdometer(car.odometerValue)}
+            VIN: {formatVIN(car.VIN)} • {formatOdometer(car.odometerValue)}
           </p>
         </div>
         <Badge variant={(car.grade || 0) >= 70 ? 'success' : (car.grade || 0) >= 50 ? 'warning' : 'error'}>
@@ -100,13 +100,20 @@ export const CarDetailsPage: React.FC = () => {
       </div>
 
       <div className="car-details-grid">
-        {/* Основная информация */}
         <Card>
           <h3>Vehicle Information</h3>
           <div className="info-grid">
             <div className="info-item">
               <span className="info-label">VIN</span>
               <span className="info-value">{car.VIN}</span>
+            </div>
+            <div className="info-item">
+              <span className="info-label">Brand</span>
+              <span className="info-value">{car.brand}</span>
+            </div>
+            <div className="info-item">
+              <span className="info-label">Model</span>
+              <span className="info-value">{car.model}</span>
             </div>
             <div className="info-item">
               <span className="info-label">Year</span>
@@ -148,9 +155,9 @@ export const CarDetailsPage: React.FC = () => {
             {marketPrice && (
               <div className="price-card">
                 <span className="price-label">Market Price</span>
-                <span className="price-value">{formatPrice(marketPrice.calculatedPrice)}</span>
+                <span className="price-value">{formatPrice(marketPrice.marketAdjustedPrice)}</span>
                 <span className="price-description">
-                  Based on {marketPrice.similarCarsCount} similar cars
+                  Grade: {marketPrice.grade.toFixed(1)}%
                 </span>
               </div>
             )}

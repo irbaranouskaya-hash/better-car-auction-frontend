@@ -2,6 +2,8 @@ export interface Car {
   _id: string;
   userId: string;
   VIN: string;
+  brand: string;
+  model: string;
   odometerValue: number;
   year: number;
   exteriorColor: string;
@@ -11,14 +13,16 @@ export interface Car {
   haveMalfunctions: boolean;
   haveElectricFailures: boolean;
   msrp: number;
-  grade?: number; // Optional as backend calculates it
-  optimizedPrice?: number; // Optional as backend calculates it
+  grade?: number;
+  optimizedPrice?: number;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CreateCarRequest {
   VIN: string;
+  brand: string;
+  model: string;
   odometerValue: number;
   year: number;
   exteriorColor: string;
@@ -35,6 +39,8 @@ export interface UpdateCarRequest extends Partial<CreateCarRequest> {}
 export interface CarsFilters {
   userId?: string;
   VIN?: string;
+  brand?: string;
+  model?: string;
   exteriorColor?: string;
   interiorColor?: string;
   year?: number;
@@ -49,12 +55,19 @@ export interface CarsFilters {
   haveElectricFailures?: boolean;
   page?: number;
   limit?: number;
-  sortBy?: 'VIN' | 'odometerValue' | 'year' | 'exteriorColor' | 'interiorColor' | 'createdAt' | 'updatedAt';
+  sortBy?: 'VIN' | 'brand' | 'model' | 'odometerValue' | 'year' | 'exteriorColor' | 'interiorColor' | 'createdAt' | 'updatedAt';
   order?: 'asc' | 'desc';
 }
 
 export interface CarPriceResponse {
-  calculatedPrice: number;
-  similarCarsCount: number;
+  car: {
+    id: string;
+    VIN: string;
+    year: number;
+    odometerValue: number;
+    msrp: number;
+  };
+  grade: number;
+  marketAdjustedPrice: number;
 }
 

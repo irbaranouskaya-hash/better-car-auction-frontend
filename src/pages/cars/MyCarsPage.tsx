@@ -144,7 +144,7 @@ export const MyCarsPage: React.FC = () => {
               <div className="car-card-header">
                 <h3>
                   <Link to={`/cars/${car._id}`} className="car-link">
-                    {car.VIN}
+                    {car.year} {car.brand} {car.model}
                   </Link>
                 </h3>
                 <Badge 
@@ -159,6 +159,10 @@ export const MyCarsPage: React.FC = () => {
               </div>
 
               <div className="car-card-details">
+                <div className="detail-row">
+                  <span className="detail-label">VIN:</span>
+                  <span className="detail-value">{car.VIN}</span>
+                </div>
                 <div className="detail-row">
                   <span className="detail-label">Year:</span>
                   <span className="detail-value">{car.year}</span>

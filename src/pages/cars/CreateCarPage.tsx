@@ -65,6 +65,24 @@ export const CreateCarPage: React.FC = () => {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
           <Input
+            label="Brand"
+            placeholder="e.g., Toyota"
+            fullWidth
+            error={errors.brand?.message}
+            {...register('brand')}
+          />
+
+          <Input
+            label="Model"
+            placeholder="e.g., Camry"
+            fullWidth
+            error={errors.model?.message}
+            {...register('model')}
+          />
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
+          <Input
             label="Year"
             type="number"
             placeholder="e.g., 2020"

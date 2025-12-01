@@ -13,7 +13,7 @@ import { Loading } from '@/components/common/Loading';
 import { Modal } from '@/components/common/Modal';
 import { Input } from '@/components/common/Input';
 import { formatDateTime, formatCountdown } from '@/utils/dateHelpers';
-import { formatPrice, formatOdometer } from '@/utils/formatters';
+import { formatPrice } from '@/utils/formatters';
 import { getGradeLabel } from '@/utils/priceHelpers';
 import './AuctionDetails.css';
 
@@ -210,11 +210,11 @@ export const AuctionDetailsPage: React.FC = () => {
                     <div>
                       <h3>
                         <Link to={`/cars/${car._id}`} className="car-link">
-                          {car.VIN}
+                          {car.year} {car.brand} {car.model}
                         </Link>
                       </h3>
                       <p className="car-info">
-                        {car.year} • {formatOdometer(car.odometerValue)} • {car.exteriorColor}
+                        VIN: {car.VIN} • {car.exteriorColor}
                       </p>
                     </div>
                     <Badge variant={(car.grade || 0) >= 70 ? 'success' : (car.grade || 0) >= 50 ? 'warning' : 'error'}>
