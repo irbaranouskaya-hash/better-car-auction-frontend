@@ -179,7 +179,7 @@ export const MyBidsPage: React.FC = () => {
           <>
             <div className="bids-list">
               {bids.map((bid) => (
-                <Card key={bid._id} className="bid-card">
+                <Card key={bid.id} className="bid-card">
                   <div className="bid-card-header">
                     <div className="bid-status">
                       {getStatusBadge(bid)}
@@ -194,7 +194,7 @@ export const MyBidsPage: React.FC = () => {
                       <div className="car-info">
                         <h3 
                           className="car-title clickable"
-                          onClick={() => handleViewCar(bid.carDetails!._id)}
+                          onClick={() => handleViewCar(bid.carDetails!.id)}
                         >
                           {bid.carDetails.year} {bid.carDetails.brand} {bid.carDetails.model}
                         </h3>
@@ -236,7 +236,7 @@ export const MyBidsPage: React.FC = () => {
                   <div className="bid-card-actions">
                     <button 
                       onClick={() => {
-                        const auctionId = typeof bid.auctionId === 'object' ? bid.auctionId._id : bid.auctionId;
+                        const auctionId = typeof bid.auctionId === 'object' ? bid.auctionId.id : bid.auctionId;
                         if (auctionId) handleViewAuction(auctionId);
                       }}
                       className="btn-secondary"
@@ -245,7 +245,7 @@ export const MyBidsPage: React.FC = () => {
                     </button>
                     {bid.carDetails && (
                       <button 
-                        onClick={() => handleViewCar(bid.carDetails!._id)}
+                        onClick={() => handleViewCar(bid.carDetails!.id)}
                         className="btn-outline"
                       >
                         View Car Details

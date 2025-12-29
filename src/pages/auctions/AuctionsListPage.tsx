@@ -128,7 +128,7 @@ export const AuctionsListPage: React.FC = () => {
         <>
           <div className="auctions-grid">
             {auctions.map((auction) => (
-              <Link key={auction._id} to={`/auctions/${auction._id}`} className="auction-link">
+              <Link key={auction.id} to={`/auctions/${auction.id}`} className="auction-link">
                 <Card hover>
                   <div className="auction-card-header">
                     <h3>{auction.name}</h3>
@@ -149,10 +149,10 @@ export const AuctionsListPage: React.FC = () => {
                         <span className="countdown">{formatCountdown(auction.endDate)}</span>
                       </div>
                     )}
-                    <div className="auction-info">
-                      <span className="label">Cars:</span>
-                      <span>{auction.cars?.length || 0}</span>
-                    </div>
+                      <div className="auction-info">
+                        <span className="label">Cars:</span>
+                        <span>{auction.totalCars ?? auction.cars?.length ?? 0}</span>
+                      </div>
                   </div>
                 </Card>
               </Link>

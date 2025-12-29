@@ -3,6 +3,11 @@ import { format, formatDistance, formatDistanceToNow, isPast, isFuture, differen
 // Helper to validate and parse date
 const parseDate = (date: string | Date | null | undefined): Date | null => {
   if (!date) return null;
+  
+  if (date instanceof Date) {
+    return isValid(date) ? date : null;
+  }
+  
   const parsed = new Date(date);
   return isValid(parsed) ? parsed : null;
 };

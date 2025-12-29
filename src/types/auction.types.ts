@@ -5,10 +5,11 @@ export interface Auction {
   endDate: string;
   createdBy: string;
   isActive: boolean;
-  cars?: string[]; // Optional as backend might not always return it
+  cars?: string[];
+  totalCars?: number;
   status: 'upcoming' | 'active' | 'ended';
-  durationHours?: number; // Optional calculated field
-  timeUntilStart?: number; // Optional calculated field
+  durationHours?: number;
+  timeUntilStart?: number;
   createdAt: string;
   updatedAt: string;
 }

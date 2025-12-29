@@ -29,6 +29,24 @@
   flex-wrap: wrap;
 }
 
+.hero-actions .btn-primary {
+  background-color: white;
+  color: var(--primary);
+}
+
+.hero-actions .btn-primary:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-actions .btn-outline {
+  color: white;
+  border-color: white;
+}
+
+.hero-actions .btn-outline:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
 /* Features */
 .features {
   padding: 4rem 0;

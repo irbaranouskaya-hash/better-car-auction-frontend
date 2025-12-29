@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,10 +10,10 @@ import { Button } from '@/components/common/Button';
 import { Loading } from '@/components/common/Loading';
 
 export const EditCarPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
-  const [fetchingCar, setFetchingCar] = useState(true);
+  const [fetching, setFetching] = useState(true);
 
   const {
     register,
@@ -25,56 +25,72 @@ export const EditCarPage: React.FC = () => {
   });
 
   useEffect(() => {
-    if (id) {
-      fetchCar();
-    }
-  }, [id]);
+    const fetchCar = async () => {
+      if (!id) {
+        toast.error('Car ID is missing');
+        navigate('/my-cars');
+        return;
+      }
 
-  const fetchCar = async () => {
-    try {
-      setFetchingCar(true);
-      const car = await carsApi.getCarById(id!);
-      reset({
-        VIN: car.VIN,
-        brand: car.brand,
-        model: car.model,
-        year: car.year,
-        odometerValue: car.odometerValue,
-        exteriorColor: car.exteriorColor,
-        interiorColor: car.interiorColor,
-        msrp: car.msrp,
-        haveStrongScratches: car.haveStrongScratches,
-        haveSmallScratches: car.haveSmallScratches,
-        haveMalfunctions: car.haveMalfunctions,
-        haveElectricFailures: car.haveElectricFailures,
-      });
-    } catch (error: any) {
-      toast.error('Failed to load car details');
-      navigate('/my-cars');
-    } finally {
-      setFetchingCar(false);
-    }
-  };
+      try {
+        setFetching(true);
+        const car = await carsApi.getCarById(id);
+        
+        reset({
+          VIN: car.VIN,
+          brand: car.brand,
+          model: car.model,
+          year: car.year,
+          odometerValue: car.odometerValue,
+          exteriorColor: car.exteriorColor,
+          interiorColor: car.interiorColor,
+          msrp: car.msrp,
+          haveStrongScratches: car.haveStrongScratches,
+          haveSmallScratches: car.haveSmallScratches,
+          haveMalfunctions: car.haveMalfunctions,
+          haveElectricFailures: car.haveElectricFailures,
+        });
+      } catch (error: any) {
+        console.error('Failed to fetch car:', error);
+        toast.error(error.response?.data?.message || 'Failed to load car');
+        navigate('/my-cars');
+      } finally {
+        setFetching(false);
+      }
+    };
+
+    fetchCar();
+  }, [id, navigate, reset]);
 
   const onSubmit = async (data: CarFormData) => {
+    if (!id) return;
+
     try {
       setLoading(true);
-      await carsApi.updateCar(id!, data);
+      console.log('Updating car with data:', data);
+      
+      const result = await carsApi.updateCar(id, data);
+      console.log('Car updated successfully:', result);
+      
       toast.success('Car updated successfully!');
       navigate('/my-cars');
     } catch (error: any) {
+      console.error('Failed to update car:', error);
+      console.error('Error response:', error.response);
+      
       const errorMessage = error.response?.data?.message 
         || error.response?.data?.error
         || error.message 
         || 'Failed to update car';
+      
       toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  if (fetchingCar) {
-    return <Loading />;
+  if (fetching) {
+    return <Loading fullScreen />;
   }
 
   return (
@@ -130,7 +146,7 @@ export const EditCarPage: React.FC = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
           <Input
             label="Exterior Color"
-            placeholder="e.g., Black"
+            placeholder="e.g., Blue"
             fullWidth
             error={errors.exteriorColor?.message}
             {...register('exteriorColor')}
@@ -138,7 +154,7 @@ export const EditCarPage: React.FC = () => {
 
           <Input
             label="Interior Color"
-            placeholder="e.g., Beige"
+            placeholder="e.g., Black"
             fullWidth
             error={errors.interiorColor?.message}
             {...register('interiorColor')}
@@ -148,46 +164,38 @@ export const EditCarPage: React.FC = () => {
         <Input
           label="MSRP ($)"
           type="number"
-          placeholder="e.g., 30000"
+          placeholder="e.g., 35000"
           fullWidth
           error={errors.msrp?.message}
           {...register('msrp', { valueAsNumber: true })}
         />
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <h3 style={{ margin: 0 }}>Condition</h3>
-          
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-            <input type="checkbox" {...register('haveStrongScratches')} />
-            <span>Has strong scratches</span>
-          </label>
-
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-            <input type="checkbox" {...register('haveSmallScratches')} />
-            <span>Has small scratches</span>
-          </label>
-
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-            <input type="checkbox" {...register('haveMalfunctions')} />
-            <span>Has malfunctions</span>
-          </label>
-
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-            <input type="checkbox" {...register('haveElectricFailures')} />
-            <span>Has electric failures</span>
-          </label>
+          <label style={{ fontWeight: 500 }}>Condition</label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <input type="checkbox" {...register('haveStrongScratches')} />
+              Has strong scratches
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <input type="checkbox" {...register('haveSmallScratches')} />
+              Has small scratches
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <input type="checkbox" {...register('haveMalfunctions')} />
+              Has malfunctions
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <input type="checkbox" {...register('haveElectricFailures')} />
+              Has electric failures
+            </label>
+          </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => navigate('/my-cars')}
-          >
+        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+          <Button type="submit" loading={loading}>Update Car</Button>
+          <Button type="button" variant="outline" onClick={() => navigate('/my-cars')}>
             Cancel
-          </Button>
-          <Button type="submit" disabled={loading}>
-            {loading ? 'Updating...' : 'Update Car'}
           </Button>
         </div>
       </form>

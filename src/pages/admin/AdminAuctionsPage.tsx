@@ -61,9 +61,9 @@ export const AdminAuctionsPage: React.FC = () => {
 
     try {
       setActionLoading(true);
-      await auctionsApi.deleteAuction(selectedAuction._id);
+      await auctionsApi.deleteAuction(selectedAuction.id);
       toast.success('Auction deleted successfully!');
-      setAuctions(auctions.filter(a => a._id !== selectedAuction._id));
+      setAuctions(auctions.filter(a => a.id !== selectedAuction.id));
       setDeleteModalOpen(false);
       setSelectedAuction(null);
     } catch (error: any) {
@@ -78,7 +78,7 @@ export const AdminAuctionsPage: React.FC = () => {
 
     try {
       setActionLoading(true);
-      await auctionsApi.closeAuction(selectedAuction._id);
+      await auctionsApi.closeAuction(selectedAuction.id);
       toast.success('Auction closed successfully!');
       await fetchAuctions();
       setCloseModalOpen(false);
@@ -154,10 +154,10 @@ export const AdminAuctionsPage: React.FC = () => {
       ) : (
         <div className="auctions-grid">
           {auctions.map((auction) => (
-            <Card key={auction._id} className="auction-card">
+            <Card key={auction.id} className="auction-card">
               <div className="auction-card-header">
                 <h3>
-                  <Link to={`/auctions/${auction._id}`}>
+                  <Link to={`/auctions/${auction.id}`}>
                     {auction.name}
                   </Link>
                 </h3>
@@ -174,10 +174,10 @@ export const AdminAuctionsPage: React.FC = () => {
                     <span className="info-label">End:</span>
                     <span className="info-value">{formatDateTime(auction.endDate)}</span>
                   </div>
-                  <div className="info-row">
-                    <span className="info-label">Cars:</span>
-                    <span className="info-value">{auction.cars?.length || 0}</span>
-                  </div>
+                    <div className="info-row">
+                      <span className="info-label">Cars:</span>
+                      <span className="info-value">{auction.totalCars ?? auction.cars?.length ?? 0}</span>
+                    </div>
                   {auction.status === 'active' && (
                     <div className="info-row">
                       <span className="info-label">Time left:</span>
@@ -187,14 +187,14 @@ export const AdminAuctionsPage: React.FC = () => {
                 </div>
 
                 <div className="auction-card-actions">
-                  <Link to={`/auctions/${auction._id}`}>
+                  <Link to={`/auctions/${auction.id}`}>
                     <Button variant="outline" fullWidth>View Details</Button>
                   </Link>
                   <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-                    <Link to={`/admin/auctions/edit/${auction._id}`} style={{ flex: 1 }}>
+                    <Link to={`/admin/auctions/edit/${auction.id}`} style={{ flex: 1 }}>
                       <Button variant="secondary" fullWidth>Edit</Button>
                     </Link>
-                    <Link to={`/admin/auctions/${auction._id}/cars`} style={{ flex: 1 }}>
+                    <Link to={`/admin/auctions/${auction.id}/cars`} style={{ flex: 1 }}>
                       <Button variant="secondary" fullWidth>Manage Cars</Button>
                     </Link>
                   </div>

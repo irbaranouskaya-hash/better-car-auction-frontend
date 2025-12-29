@@ -252,7 +252,7 @@ export const CarsListPage: React.FC = () => {
         <>
           <div className="cars-grid">
             {cars.map((car) => (
-              <Link key={car._id} to={`/cars/${car._id}`} className="car-link">
+              <Link key={car.id} to={`/cars/${car.id}`} className="car-link">
                 <Card hover>
                   <div className="car-card">
                     <div className="car-card-header">

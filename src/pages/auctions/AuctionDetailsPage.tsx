@@ -180,7 +180,7 @@ export const AuctionDetailsPage: React.FC = () => {
           )}
           <div className="info-item">
             <span className="info-label">Cars in Auction</span>
-            <span className="info-value">{auction.cars?.length || 0}</span>
+            <span className="info-value">{auction.totalCars ?? auction.cars?.length ?? 0}</span>
           </div>
         </div>
       </Card>
@@ -201,15 +201,15 @@ export const AuctionDetailsPage: React.FC = () => {
               const car = carWithBids.car;
               const highestBid = carWithBids.highestBid;
               const userHasBid = carWithBids.bids.some(
-                (bid) => bid.user?._id === user?._id
+                (bid) => bid.user?.id === user?.id
               );
 
               return (
-                <Card key={car._id} className="car-auction-card">
+                <Card key={car.id} className="car-auction-card">
                   <div className="car-auction-header">
                     <div>
                       <h3>
-                        <Link to={`/cars/${car._id}`} className="car-link">
+                        <Link to={`/cars/${car.id}`} className="car-link">
                           {car.year} {car.brand} {car.model}
                         </Link>
                       </h3>
@@ -248,12 +248,12 @@ export const AuctionDetailsPage: React.FC = () => {
                       {carWithBids.bids.length > 0 ? (
                         <div className="bids-list">
                           {carWithBids.bids.slice(0, 3).map((bid) => {
-                            const isUserBid = bid.user?._id === user?._id;
+                            const isUserBid = bid.user?.id === user?.id;
                             const isWinning = bid.isWinning;
 
                             return (
                               <div 
-                                key={bid._id} 
+                                key={bid.id} 
                                 className={`bid-item ${isWinning ? 'winning' : ''} ${isUserBid ? 'user-bid' : ''}`}
                               >
                                 <span className="bid-user">
@@ -276,7 +276,7 @@ export const AuctionDetailsPage: React.FC = () => {
                     {auction.status === 'active' && isAuthenticated && (
                       <Button
                         fullWidth
-                        onClick={() => handleOpenBidModal(car._id, highestBid || undefined)}
+                        onClick={() => handleOpenBidModal(car.id, highestBid || undefined)}
                         variant={userHasBid ? 'secondary' : 'primary'}
                       >
                         {userHasBid ? 'Update Bid' : 'Place Bid'}

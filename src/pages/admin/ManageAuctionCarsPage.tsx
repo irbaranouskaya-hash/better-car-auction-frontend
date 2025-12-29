@@ -43,7 +43,7 @@ export const ManageAuctionCarsPage: React.FC = () => {
         const auctionCarIds = auctionData.cars || [];
         if (auctionCarIds.length > 0) {
           const carsPromises = auctionCarIds.map((carId: any) => 
-            carsApi.getCarById(typeof carId === 'string' ? carId : carId._id)
+            carsApi.getCarById(typeof carId === 'string' ? carId : carId.id)
           );
           const carsData = await Promise.all(carsPromises);
           setAuctionCars(carsData.filter(Boolean));
@@ -66,11 +66,11 @@ export const ManageAuctionCarsPage: React.FC = () => {
         
         // Фильтруем машины, которых ещё нет в аукционе
         const auctionCarIdsSet = new Set(
-          auctionCarIds.map((c: any) => typeof c === 'string' ? c : c._id)
+          auctionCarIds.map((c: any) => typeof c === 'string' ? c : c.id)
         );
         console.log('Auction car IDs:', Array.from(auctionCarIdsSet));
         
-        const available = allCars.filter((car: Car) => !auctionCarIdsSet.has(car._id));
+        const available = allCars.filter((car: Car) => !auctionCarIdsSet.has(car.id));
         console.log('Available cars for adding:', available.length);
         setAvailableCars(available);
         
@@ -107,7 +107,7 @@ export const ManageAuctionCarsPage: React.FC = () => {
       
       const auctionCarIds = auctionData.cars || [];
       const carsPromises = auctionCarIds.map((carId: any) => 
-        carsApi.getCarById(typeof carId === 'string' ? carId : carId._id)
+        carsApi.getCarById(typeof carId === 'string' ? carId : carId.id)
       );
       const carsData = await Promise.all(carsPromises);
       setAuctionCars(carsData.filter(Boolean));
@@ -125,9 +125,9 @@ export const ManageAuctionCarsPage: React.FC = () => {
       }
       
       const auctionCarIdsSet = new Set(
-        auctionCarIds.map((c: any) => typeof c === 'string' ? c : c._id)
+        auctionCarIds.map((c: any) => typeof c === 'string' ? c : c.id)
       );
-      const available = allCars.filter((car: Car) => !auctionCarIdsSet.has(car._id));
+      const available = allCars.filter((car: Car) => !auctionCarIdsSet.has(car.id));
       setAvailableCars(available);
       
       setAddModalOpen(false);
@@ -147,8 +147,8 @@ export const ManageAuctionCarsPage: React.FC = () => {
       toast.success('Car removed from auction!');
       
       // Обновляем списки
-      const removedCar = auctionCars.find(c => c._id === carId);
-      setAuctionCars(prev => prev.filter(c => c._id !== carId));
+      const removedCar = auctionCars.find(c => c.id === carId);
+      setAuctionCars(prev => prev.filter(c => c.id !== carId));
       if (removedCar) {
         setAvailableCars(prev => [...prev, removedCar]);
       }
@@ -196,7 +196,7 @@ export const ManageAuctionCarsPage: React.FC = () => {
       ) : (
         <div className="cars-grid">
           {auctionCars.map((car) => (
-            <Card key={car._id} className="car-card">
+            <Card key={car.id} className="car-card">
               <div className="car-card-header">
                 <h3>{car.year} {car.brand} {car.model}</h3>
                 <Badge 
@@ -247,7 +247,7 @@ export const ManageAuctionCarsPage: React.FC = () => {
               <div className="car-card-actions">
                 <Button
                   variant="outline"
-                  onClick={() => handleRemoveCar(car._id)}
+                  onClick={() => handleRemoveCar(car.id)}
                   fullWidth
                   style={{ color: 'var(--error)', borderColor: 'var(--error)' }}
                 >
@@ -288,7 +288,7 @@ export const ManageAuctionCarsPage: React.FC = () => {
               <div style={{ maxHeight: '400px', overflowY: 'auto', marginBottom: '1rem' }}>
                 {availableCars.map((car) => (
                   <label
-                    key={car._id}
+                    key={car.id}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -297,13 +297,13 @@ export const ManageAuctionCarsPage: React.FC = () => {
                       borderRadius: '4px',
                       marginBottom: '0.5rem',
                       cursor: 'pointer',
-                      backgroundColor: selectedCarIds.includes(car._id) ? 'var(--bg-secondary)' : 'transparent'
+                      backgroundColor: selectedCarIds.includes(car.id) ? 'var(--bg-secondary)' : 'transparent'
                     }}
                   >
                     <input
                       type="checkbox"
-                      checked={selectedCarIds.includes(car._id)}
-                      onChange={() => handleToggleCarSelection(car._id)}
+                      checked={selectedCarIds.includes(car.id)}
+                      onChange={() => handleToggleCarSelection(car.id)}
                       style={{ marginRight: '0.75rem' }}
                     />
                     <div style={{ flex: 1 }}>

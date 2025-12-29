@@ -32,7 +32,15 @@ export const auctionsApi = {
   },
 
   getCurrentAuction: async (): Promise<Auction | null> => {
-    const response = await axiosInstance.get<Auction | null>('/auctions/current');
+    const response = await axiosInstance.get<any>('/auctions/current');
+    console.log('Get current auction response:', response.data);
+    
+    if (response.data.success && response.data.data) {
+      return response.data.data;
+    }
+    if (response.data.data) {
+      return response.data.data;
+    }
     return response.data;
   },
 
@@ -126,7 +134,7 @@ export const auctionsApi = {
   },
 
   closeAuction: async (auctionId: string) => {
-    const response = await axiosInstance.post<any>(`/auctions/${auctionId}/close`);
+    const response = await axiosInstance.post<any>(`/bids/auctions/${auctionId}/close`);
     console.log('Close auction response:', response.data);
     
     if (response.data.success && response.data.data) {

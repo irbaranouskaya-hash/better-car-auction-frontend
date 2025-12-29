@@ -82,7 +82,7 @@ const App: React.FC = () => {
                 }
               />
               <Route
-                path="/my-cars/:id/edit"
+                path="/my-cars/edit/:id"
                 element={
                   <PrivateRoute>
                     <EditCarPage />

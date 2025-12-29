@@ -110,12 +110,12 @@ export const HomePage: React.FC = () => {
                     {formatCountdown(currentAuction.endDate)}
                   </span>
                 </div>
-                <div className="info-item">
-                  <span className="info-label">Cars Available:</span>
-                  <span className="info-value">{currentAuction.cars?.length || 0}</span>
-                </div>
+                  <div className="info-item">
+                    <span className="info-label">Cars Available:</span>
+                    <span className="info-value">{currentAuction.totalCars ?? currentAuction.cars?.length ?? 0}</span>
+                  </div>
               </div>
-              <Link to={`/auctions/${currentAuction._id}`}>
+              <Link to={`/auctions/${currentAuction.id}`}>
                 <Button size="lg">
                   View Auction Details <ArrowRight size={20} />
                 </Button>

@@ -89,11 +89,11 @@ export const MyCarsPage: React.FC = () => {
 
     try {
       setDeleting(true);
-      await carsApi.deleteCar(carToDelete._id);
+      await carsApi.deleteCar(carToDelete.id);
       toast.success('Car deleted successfully!');
       
       // Удаляем из списка
-      setCars(cars.filter(car => car._id !== carToDelete._id));
+      setCars(cars.filter(car => car.id !== carToDelete.id));
       
       setDeleteModalOpen(false);
       setCarToDelete(null);
@@ -140,10 +140,10 @@ export const MyCarsPage: React.FC = () => {
       ) : (
         <div className="cars-grid">
           {cars.map((car) => (
-            <Card key={car._id} className="car-card">
+            <Card key={car.id} className="car-card">
               <div className="car-card-header">
                 <h3>
-                  <Link to={`/cars/${car._id}`} className="car-link">
+                  <Link to={`/cars/${car.id}`} className="car-link">
                     {car.year} {car.brand} {car.model}
                   </Link>
                 </h3>
@@ -204,11 +204,11 @@ export const MyCarsPage: React.FC = () => {
               </div>
 
               <div className="car-card-actions">
-                <Link to={`/cars/${car._id}`}>
+                <Link to={`/cars/${car.id}`}>
                   <Button variant="outline" fullWidth>View Details</Button>
                 </Link>
                 <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-                  <Link to={`/my-cars/edit/${car._id}`} style={{ flex: 1 }}>
+                  <Link to={`/my-cars/edit/${car.id}`} style={{ flex: 1 }}>
                     <Button variant="secondary" fullWidth>Edit</Button>
                   </Link>
                   <Button 
