@@ -203,7 +203,7 @@ export const CarDetailsPage: React.FC = () => {
         <Card className="actions-card">
           <h3>Actions</h3>
           <div className="actions-buttons">
-            <Link to={`/my-cars/${car.id}/edit`}>
+            <Link to={`/my-cars/edit/${car.id}`}>
               <Button variant="primary">Edit Car</Button>
             </Link>
             <Button variant="danger" onClick={() => setDeleteModalOpen(true)}>
